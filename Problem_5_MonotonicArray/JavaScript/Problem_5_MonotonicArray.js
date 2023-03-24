@@ -9,7 +9,26 @@
 
 const isMatrixMonotonic = (matrix) => {
 
-    return false;
+    if(matrix.length === 0 || matrix[0].length === 0) return false;
+
+    rowCount = matrix.length;
+    columnCount = matrix[0].length;
+
+    for(let rowIndex = 0; rowIndex < rowCount; rowIndex++) {
+        for(let columnIndex = 0; columnIndex < columnCount; columnIndex++) {
+            const currentValue = matrix[rowIndex][columnIndex];
+
+            if(rowIndex > 0 && matrix[rowIndex - 1][columnIndex] > currentValue) {
+                return false;
+            }
+
+            if(columnIndex > 0 && matrix[rowIndex][columnIndex - 1] > currentValue) {
+                return false;
+            }
+        }
+    }
+
+    return true;
 
 }
 
