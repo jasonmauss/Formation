@@ -4,6 +4,30 @@
 
 const findInMonotonic = (matrix, k) => {
 
+    if(matrix.length === 0) return false;
+
+    rowCount = matrix.length;
+    columnCount = matrix[0].length;
+
+    if(matrix[rowCount - 1][columnCount - 1] < k) return false;
+
+    // this is kind of like a binary search in a way
+    // except the start point isn't in the middle, it's at
+    // the bottom
+    let currentRow = rowCount - 1;
+    let currentColumn = 0;
+
+    while(currentColumn < columnCount && currentRow >= 0) {
+        let currentValue = matrix[currentRow][currentColumn];
+        if(currentValue === k) return true;
+
+        if(currentValue < k) {
+            currentColumn++;
+        } else {
+            currentRow--;
+        }
+    }
+
     return false;
 
 }
