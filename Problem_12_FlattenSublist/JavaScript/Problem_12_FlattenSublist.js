@@ -21,13 +21,34 @@ const flattenSublist = (head) => {
   const output = [];
 
 
-  /* your code here */
+  const depthFirstHelperFunc = (node) => {
+    if(!node) return;
+    
+    if(node.value) output.push(node.value);
 
+    depthFirstHelperFunc(node.sublist);
+
+    depthFirstHelperFunc(node.next);
+
+  }
+
+  depthFirstHelperFunc(head);
 
   return output;
 
 }
 
 
+let head = new LLNode(1,
+  new LLNode(2), // next
+  new LLNode(3, // sublist
+    new LLNode(4), // sublist's next
+    new LLNode(5,
+      new LLNode(6),
+      new LLNode(7)
+    )
+  )
+);
+
 // some test cases
-console.log(flattenSublist()); // 
+console.log(flattenSublist(head)); // [1, 3, 5, 7, 6, 4, 2]
