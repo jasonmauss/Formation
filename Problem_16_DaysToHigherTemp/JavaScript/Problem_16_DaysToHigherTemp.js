@@ -11,7 +11,25 @@
 
 const daysToHigherTemp = (dailyHighs) => {
   
-    return [];
+    const daysUntilHigherTemp = [];
+
+    for(let currentDay = 0; currentDay < dailyHighs.length; currentDay++) {
+        let daysElapsed = 1;
+        let higherTempFound = false;
+        for(let futureDays = currentDay + 1; futureDays < dailyHighs.length; futureDays++) {
+            if(dailyHighs[futureDays] > dailyHighs[currentDay]) {
+                daysUntilHigherTemp.push(daysElapsed);
+                higherTempFound = true;
+                break;
+            } else {
+                daysElapsed++;
+                continue;
+            }
+        }
+        if(!higherTempFound) daysUntilHigherTemp.push(0);
+    }
+
+    return daysUntilHigherTemp;
 
 }
 
