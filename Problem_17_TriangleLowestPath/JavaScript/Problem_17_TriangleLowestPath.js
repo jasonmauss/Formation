@@ -13,12 +13,26 @@
 */
 // Here, the result is 11 because of the path 2 + 3 + 5 + 1.
 
-const triangleLowestPath = () => {
+const triangleLowestPath = (triangleArray) => {
     
-    return 0;
+    let minimumPathSum = 0;
+    let index = 0;
+
+    minimumPathSum = triangleArray[0][index];
+
+    for(let step = 1; step < triangleArray.length; step++) {
+        const arrayValues = triangleArray[step];
+        if(arrayValues[index] < arrayValues[index + 1]) {
+            minimumPathSum += arrayValues[index];
+        } else {
+            minimumPathSum += arrayValues[index + 1];
+            index++;
+        }
+    }
+
+    return minimumPathSum;
 
 }
-
 
 
 // some test cases
