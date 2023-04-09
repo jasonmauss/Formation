@@ -28,6 +28,7 @@ const addSpacesBetweenWords = (wordString, lineLength) => {
     wordArray = wordString.split(' ');
     spacesArray = new Array(wordArray.length - 1).fill('');
     spacesNeeded = lineLength - wordArray.join().length;
+    spacesNeeded += wordArray.length - 1; // add in the need for a space between the words, but not after the last word
 
     while(spacesNeeded > 0) {
         for(let spaces in spacesArray) {
@@ -41,7 +42,7 @@ const addSpacesBetweenWords = (wordString, lineLength) => {
 
     let spacedOutWord = '';
     for(let i = 0; wordArray.length > 0; i++) {
-        if(i < wordArray.length - 1) {
+        if(wordArray.length > 1) {
             spacedOutWord += wordArray.shift() + spacesArray[i]
         } else {
             spacedOutWord += wordArray.shift();
@@ -63,16 +64,20 @@ const textJustification = (words, lineLength) => {
         currentBuffer += words.shift() + ' ';
 
         // if we added the next word, would it exceed the line length?
-        if(words[0].length + currentBuffer.length > lineLength) {
+        if(words.length > 0 && words[0].length + currentBuffer.length > lineLength) {
             justifiedWords.push(addSpacesBetweenWords(currentBuffer, lineLength));
             currentBuffer = '';
         // if stripping off the current ending space make it match exactly
         } else if (currentBuffer.length - 1 === lineLength) {
             justifiedWords.push(currentBuffer.substring(0, currentBuffer.length - 1));
         // what if the next word made it match the line length exactly?
-        } else if (words[0].length + currentBuffer.length === lineLength) {
+        } else if (words.length > 0 && words[0].length + currentBuffer.length === lineLength) {
             justifiedWords.push(currentBuffer + words.shift());
             currentBuffer = '';
+        // we are at the end of our word supply, so just work with what we've got in the
+        // current buffer
+        } else if (words.length === 0) {
+            justifiedWords.push(addSpacesBetweenWords(currentBuffer, lineLength));
         // otherwise the next word would still be less than the line length
         // so just keep going in the loop
         } else {
@@ -95,3 +100,14 @@ console.log(textJustification(["The", "quick", "brown", "fox", "jumps", "over", 
 // "jumps   over",
 // "the lazy dog"
 // ]
+
+console.log(textJustification(["The", "quick", "brown", "fox", "jumps", "over", "the", "lazy", "dog"], 16));
+// returns
+// [ 'The  quick brown',
+//   'fox  jumps  over',
+//   'the   lazy   dog'
+// ]
+
+console.log(textJustification(["The", "quick", "brown", "fox", "jumps", "over", "the", "lazy", "dog"], 75));
+// returns
+// ['The     quick     brown     fox     jumps     over     the     lazy     dog']
