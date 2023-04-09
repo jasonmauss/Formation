@@ -22,17 +22,67 @@ Generates:
 ]
 */
 
+const addSpacesBetweenWords = (wordString, lineLength) => {
+    // trim any spaces off the end of the word
+    wordString = wordString.trimEnd();
+    wordArray = wordString.split(' ');
+    spacesArray = new Array(wordArray.length - 1).fill('');
+    spacesNeeded = lineLength - wordArray.join().length;
+
+    while(spacesNeeded > 0) {
+        for(let spaces in spacesArray) {
+
+            if(spacesNeeded > 0) {
+                spacesArray[spaces] += ' ';
+                --spacesNeeded;
+            }
+        }
+    }
+
+    let spacedOutWord = '';
+    for(let i = 0; wordArray.length > 0; i++) {
+        if(i < wordArray.length - 1) {
+            spacedOutWord += wordArray.shift() + spacesArray[i]
+        } else {
+            spacedOutWord += wordArray.shift();
+        }
+    }
+
+    return spacedOutWord;
+
+};
+
 const textJustification = (words, lineLength) => {
   
-    return [];
+    const justifiedWords = [];
+    let currentBuffer = '';
+    currentWord = 0;
 
-}
+    while(words.length > 0) {
 
+        currentBuffer += words.shift() + ' ';
 
+        // if we added the next word, would it exceed the line length?
+        if(words[0].length + currentBuffer.length > lineLength) {
+            justifiedWords.push(addSpacesBetweenWords(currentBuffer, lineLength));
+            currentBuffer = '';
+        // if stripping off the current ending space make it match exactly
+        } else if (currentBuffer.length - 1 === lineLength) {
+            justifiedWords.push(currentBuffer.substring(0, currentBuffer.length - 1));
+        // what if the next word made it match the line length exactly?
+        } else if (words[0].length + currentBuffer.length === lineLength) {
+            justifiedWords.push(currentBuffer + words.shift());
+            currentBuffer = '';
+        // otherwise the next word would still be less than the line length
+        // so just keep going in the loop
+        } else {
+            continue;
+        }
+    }
 
+    return justifiedWords;
 
-
-
+};
 
 
 
