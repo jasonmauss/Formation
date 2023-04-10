@@ -18,8 +18,32 @@ Becomes:
 
 const setMatrixZeros = (matrix) => {
   
-    return [];
+    const zeroColumns = new Set();
+    const zeroRows = new Set();
+    const totalRows = matrix.length;
+    const totalColumns = matrix[0].length;
 
+    for(let rowIndex = 0; rowIndex < totalRows; rowIndex++) {
+
+        for(columnIndex = 0; columnIndex < totalColumns; columnIndex++) {
+            if(matrix[rowIndex][columnIndex] === 0) {
+                zeroColumns.add(columnIndex);
+                zeroRows.add(rowIndex);
+                matrix[rowIndex].fill(0);
+                break;
+            }
+        }
+    }
+
+    for(let rowIndex = 0; rowIndex < totalRows; rowIndex++) {
+        if(!zeroRows.has(rowIndex)) {
+            for(const colIndex of zeroColumns) {
+                matrix[rowIndex][colIndex] = 0;
+            }
+        }
+    }
+
+    return matrix;
 }
 
 
